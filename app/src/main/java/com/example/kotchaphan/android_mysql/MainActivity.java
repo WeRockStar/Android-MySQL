@@ -1,5 +1,6 @@
 package com.example.kotchaphan.android_mysql;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = v.getId();
         switch (id) {
             case R.id.btnViewProducts:
-                
+                Intent intent = new Intent(getApplicationContext() , AllProductsAci)
                 break;
             case R.id.btnCreateProduct:
                 break;
