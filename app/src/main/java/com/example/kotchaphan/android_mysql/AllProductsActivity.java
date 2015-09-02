@@ -5,13 +5,18 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,6 +94,44 @@ public class AllProductsActivity extends ListActivity {
         @Override
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
+            //getting JSON string from url
+            JSONObject json = jParser.makeHttpRequest(url_all_products, "GET", params);
+
+            //check json response
+            Log.d("all products", json.toString());
+
+            try {
+                int success = json.getInt(TAG_SUCCESS);
+
+                // 1 == success
+                if (success == 1) {
+                    //getting array of products
+                    product = json.getJSONArray(TAG_PRODUCTS);
+
+                    for (int i = 0; i < product.length(); i++) {
+                        JSONObject c = product.getJSONObject(i);
+
+                        //store json item in value
+                        String id = c.getString(TAG_PID);
+                        String name = c.getString(TAG_NAME);
+
+                        //create new HasMap
+                        HashMap<String, String> map = new HashMap<String, String>();
+
+                        //adding HashList to ArrayList
+                        map.put(TAG_PID, id);
+                        map.put(TAG_NAME, name);
+
+                        productsList.add(map);
+                    }
+                } else {
+                    Intent i = new Intent(getApplicationContext(), NewProductActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
@@ -100,6 +143,20 @@ public class AllProductsActivity extends ListActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            //progress dialog cancel
+            pDialog.dismiss();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ListAdapter adapter = new SimpleAdapter(AllProductsActivity.this,
+                            productsList, R.layout.list_item, new String[]{TAG_PID, TAG_NAME},
+                            new int[]{R.id.pid, R.id.name});
+
+                    setListAdapter(adapter);
+                }
+            });
         }
     }
 
