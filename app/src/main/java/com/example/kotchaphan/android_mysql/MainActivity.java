@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = v.getId();
         switch (id) {
             case R.id.btnViewProducts:
-                Intent intent = new Intent(getApplicationContext() , AllProductsAci)
+                Intent intent = new Intent(getApplicationContext() , AllProductsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btnCreateProduct:
                 break;
