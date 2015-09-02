@@ -138,6 +138,7 @@ public class AllProductsActivity extends ListActivity {
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
+            pDialog.dismiss();
         }
 
         @Override
