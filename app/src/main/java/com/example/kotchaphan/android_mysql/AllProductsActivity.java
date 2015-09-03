@@ -95,7 +95,7 @@ public class AllProductsActivity extends ListActivity {
         protected String doInBackground(String... args) {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             //getting JSON string from url
-            JSONObject json = jParser.makeHttpRequest(url_all_products, "GET", params);
+            JSONObject json = jParser.makeHttpRequest(url_all_products, "POST", params);
 
             //check json response
             Log.d("all products", json.toString());
